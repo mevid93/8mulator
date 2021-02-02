@@ -1,6 +1,9 @@
 # ignore build
 /build
 
+# ignore exmpale programs folder
+/programs
+
 # Prerequisites
 *.d
 
