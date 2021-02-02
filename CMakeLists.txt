@@ -5,10 +5,7 @@ cmake_minimum_required(VERSION 3.5)
 project (8mulator)
 
 # Create a sources variable with a link to all cpp files to compile
-set(SOURCES
-    src/main.cpp
-    src/cpu.cpp
-)
+file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 # Add an executable with the above sources
 add_executable(${PROJECT_NAME} ${SOURCES})
