@@ -76,12 +76,32 @@ void Chip8::loadProgram(const std::string filename)
 
 void Chip8::emulateCycle()
 {
-    // Fetch Opcode
-    // Decode Opcode
-    // Execute Opcode
-    // Update timers
+    fetchOpcode();
+    decodeOpcode();
+    executeOpcode();
+    updateTimers();
 }
 
 void Chip8::setKeys()
 {
+}
+
+void Chip8::fetchOpcode()
+{
+
+}
+
+void Chip8::decodeOpcode()
+{
+
+}
+
+void Chip8::executeOpcode()
+{
+
+}
+
+void Chip8::updateTimers()
+{
+
 }
