@@ -1,6 +1,9 @@
 #include <iostream>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include "chip8.hpp"
 #include "utilities.hpp"
+#include "gui.hpp"
 
 /* main function for the program */
 int main(int argc, char *argv[])
@@ -18,13 +21,21 @@ int main(int argc, char *argv[])
     chip8->initialize();
     chip8->loadProgram(argv[1]);
 
-    // set up OpenGL render system and register input callbacks
-    // setupGraphics();
+    // set up OpenGL render system 
+    GLFWwindow *window = setupGraphics();
+    if(window == nullptr) return -1;
+    
+    // register input callbacks
     // setupInput();
 
     // emulation loop
-    while (true)
+    while (!glfwWindowShouldClose(window))
     {
+        
+        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+
         // emulate one cycle
         chip8->emulateCycle();
 
@@ -36,5 +47,7 @@ int main(int argc, char *argv[])
             chip8->setKeys();
     }
 
+    // glfw: terminate, clearing all previously allocated GLFW resources.
+    glfwTerminate();
     return 0;
 }

@@ -5,7 +5,10 @@ cmake_minimum_required(VERSION 3.5)
 project (8mulator)
 
 # Create a sources variable with a link to all cpp files to compile
-file(GLOB_RECURSE SOURCES "src/*.cpp")
+file(GLOB_RECURSE SOURCES 
+    "src/*.cpp"
+    "lib/glad/src/glad.c"
+)
 
 # Add an executable with the above sources
 add_executable(${PROJECT_NAME} ${SOURCES})
@@ -15,3 +18,7 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE 
         ${PROJECT_SOURCE_DIR}/include
 )
+
+# Link the GLFW library to target binary
+find_package(glfw3 3.3 REQUIRED)
+target_link_libraries(${PROJECT_NAME} glfw)
