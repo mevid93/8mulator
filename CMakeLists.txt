@@ -22,7 +22,7 @@ file(GLOB_RECURSE SOURCES
 )
 
 # add files to executable
-add_executable(${PROJECT_NAME} ${SOURCES} ${TINYCTHREAD} ${GETOPT} ${GLAD})
+add_executable(${PROJECT_NAME} ${SOURCES})
 
 # Set the directories that should be included in the build command
 target_include_directories(${PROJECT_NAME}
