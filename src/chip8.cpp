@@ -43,7 +43,7 @@ void Chip8::initialize()
     sp = 0;
 
     // load font set into memory
-    for(char i = 0; i < FONTSET_SIZE; i++)
+    for (char i = 0; i < FONTSET_SIZE; i++)
     {
         memory[i] = fontset[i];
     }
@@ -88,20 +88,17 @@ void Chip8::setKeys()
 
 void Chip8::fetchOpcode()
 {
-
+    opcode = memory[pc] << 8 | memory[pc + 1];
 }
 
 void Chip8::decodeOpcode()
 {
-
 }
 
 void Chip8::executeOpcode()
 {
-
 }
 
 void Chip8::updateTimers()
 {
-
 }

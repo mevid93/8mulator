@@ -32,6 +32,8 @@ int main(int argc, char *argv[])
     {
         // check user input
         processInput(window);
+        // Store key press state (Press and Release)
+        chip8->setKeys();
 
         // emulate one cycle
         chip8->emulateCycle();
@@ -40,9 +42,6 @@ int main(int argc, char *argv[])
         if (chip8->drawFlag)
             drawGraphics();
 
-        // Store key press state (Press and Release)
-        chip8->setKeys();
-
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -50,5 +49,9 @@ int main(int argc, char *argv[])
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     glfwTerminate();
+
+    // delete other resources
+    delete chip8;
+
     return 0;
 }
