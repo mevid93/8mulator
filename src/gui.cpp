@@ -38,3 +38,8 @@ GLFWwindow *setupGraphics()
 
     return window;
 }
+
+void drawGraphics()
+{
+    
+}

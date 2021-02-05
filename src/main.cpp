@@ -4,6 +4,7 @@
 #include "chip8.hpp"
 #include "utilities.hpp"
 #include "gui.hpp"
+#include "io.hpp"
 
 /* main function for the program */
 int main(int argc, char *argv[])
@@ -21,30 +22,30 @@ int main(int argc, char *argv[])
     chip8->initialize();
     chip8->loadProgram(argv[1]);
 
-    // set up OpenGL render system 
+    // set up OpenGL render system
     GLFWwindow *window = setupGraphics();
-    if(window == nullptr) return -1;
-    
-    // register input callbacks
-    // setupInput();
+    if (window == nullptr)
+        return -1;
 
     // emulation loop
     while (!glfwWindowShouldClose(window))
     {
-        
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+        // check user input
+        processInput(window);
 
         // emulate one cycle
         chip8->emulateCycle();
 
         // if the draw flag is set, update the screen
         if (chip8->drawFlag)
-            // drawGraphics();
+            drawGraphics();
 
-            // Store key press state (Press and Release)
-            chip8->setKeys();
+        // Store key press state (Press and Release)
+        chip8->setKeys();
+
+        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+        glfwSwapBuffers(window);
+        glfwPollEvents();
     }
 
     // glfw: terminate, clearing all previously allocated GLFW resources.

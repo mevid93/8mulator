@@ -6,5 +6,7 @@
 // function to initialize GLFW window
 GLFWwindow *setupGraphics();
 
+// function to draw graphics
+void drawGraphics();
 
 #endif
