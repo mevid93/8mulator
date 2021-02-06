@@ -2,8 +2,8 @@
 #include <glad/glad.h>
 #include "gui.hpp"
 
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGTH = 600;
+const unsigned int SCR_WIDTH = 1280;
+const unsigned int SCR_HEIGTH = 720;
 
 // glfw: whenever the window size changed, this callback function executes
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -41,5 +41,5 @@ GLFWwindow *setupGraphics()
 
 void drawGraphics()
 {
-    
+
 }

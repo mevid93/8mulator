@@ -53,8 +53,7 @@ private:
     };
 
     void fetchOpcode();
-    void decodeOpcode();
-    void executeOpcode();
+    void decodeAndExecuteOpcode();
     void updateTimers();
 };
 
