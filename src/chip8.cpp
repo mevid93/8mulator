@@ -85,6 +85,10 @@ void Chip8::setKeys()
 {
 }
 
+void Chip8::updateTimers()
+{
+}
+
 void Chip8::fetchOpcode()
 {
     opcode = memory[pc] << 8 | memory[pc + 1];
@@ -92,158 +96,284 @@ void Chip8::fetchOpcode()
 
 void Chip8::decodeAndExecuteOpcode()
 {
-    // case 00E0: clears the screen
-    if (opcode == 0x00E0)
+    if (opcode == 0x00E0) // case 00E0
     {
-        return;
+        executeOpcode00E0();
     }
-
-    // case 00EE: Returns from subroutine
-    if (opcode == 0x00EE){
-        return;
-    }
-
-    // case 0NNN: Calls machine code routine at address NNN.
-    if (opcode & 0XF000 == 0X000)
+    else if (opcode == 0x00EE) // case 00EE
     {
-        return;
+        executeOpcode00EE();
     }
-
-    // case 1NNN: Jumps to address NNN 
-    if (opcode >> 12 == 0X001)
+    else if (opcode & 0xF000 == 0x0000) // case 0NNN
     {
-        return;
+        executeOpcode0NNN();
     }
-
-    // case 2NNN: Calls subroutine at NNN
-    if (opcode >> 12 == 0x002)
+    else if (opcode >> 12 == 0x0001) // case 1NNN
     {
-        return;
+        executeOpcode1NNN();
     }
-
-    // case 3XNN: Skips the next instruction if register X content equals NN
-    if (opcode >> 12 == 0x003)
+    else if (opcode >> 12 == 0x0002) // case 2NNN
     {
-        return;
+        executeOpcode2NNN();
     }
-
-    // case 4XNN: Skips the next instruction if register X content does not equal NN
-    if (opcode >> 12 == 0x004)
+    else if (opcode >> 12 == 0x0003) // case 3XNN
     {
-        return;
+        executeOpcode3XNN();
     }
-
-    // case 5XY0: Skips the next instruction if register X content equals register Y content
-    if (opcode >> 12 == 0x005)
+    else if (opcode >> 12 == 0x0004) // case 4XNN
     {
-        return;
+        executeOpcode4XNN();
     }
-
-    // case 6XNN: Set NN to register X content
-    if (opcode >> 12 == 0x006)
+    else if (opcode >> 12 == 0x0005) // case 5XY0
     {
-        return;
+        executeOpcode5XY0();
     }
-
-    // case 7XNN: Add NN to content of register X
-    if (opcode >> 12 == 0x007)
+    else if (opcode >> 12 == 0x0006) // case 6XNN
     {
-        return;
+        executeOpcode6XNN();
     }
-
-    // case 8XY0: Set content of register Y to register X content
-    if (opcode & 0xF00F == 0x8000)
+    else if (opcode >> 12 == 0x0007) // case 7XNN
     {
-        return;
+        executeOpcode7XNN();
     }
-
-    // case 8XY1: Set content of register X as bitwise or of registers X and Y
-    if (opcode & 0xF00F == 0x8001)
+    else if (opcode & 0xF00F == 0x8000) // case 8XY0
     {
-        return;
+        executeOpcode8XY0();
     }
-
-    // case 8XY2: Set content of register X as bitwise and of registers X and Y
-    if (opcode & 0XF00F == 0X8002)
+    else if (opcode & 0xF00F == 0x8001) // case 8XY1
     {
-        return;
+        executeOpcode8XY1();
     }
-
-    // case 8XY3: Set content of register X as bitwise xor of registers X and Y
-    if (opcode & 0XF00F == 0X8003)
+    else if (opcode & 0xF00F == 0x8002) // case 8XY2
     {
-        return;
+        executeOpcode8XY2();
     }
-
-    // case 8XY4: Adds register Y content to register X. 
-    // Register F is 1 when there is carry, and 0 otherwise
-    if (opcode & 0XF00F == 0X8004)
+    else if (opcode & 0xF00F == 0x8003) // case 8XY3
     {
-        return;
+        executeOpcode8XY3();
     }
-
-    // case 8XY5: Remove register Y from register X.
-    // Register F is set to 0 when there is a borrow, 1 otherwise
-    if (opcode & 0XF00F == 0X8005)
+    else if (opcode & 0xF00F == 0x8004) // case 8XY4
     {
-        return;
+        executeOpcode8XY4();
     }
-
-    // case 8XY6: Stores the least significant bit of register X in 
-    // register F and then shifts register X to the right by 1
-    if (opcode & 0XF00F == 0x8006)
+    else if (opcode & 0xF00F == 0x8005) // case 8XY5
     {
-        return;
+        executeOpcode8XY5();
     }
-
-    // case 8XY7: Sets register X to register Y minus register X.
-    // Register F is set to 0, when there is a borrow, and 1 otherwise
-    if (opcode & 0XF00F == 0x8007)
+    else if (opcode & 0xF00F == 0x8006) // case 8XY6
     {
-        return;
+        executeOpcode8XY6();
     }
-
-    // case 8XYE: Stores the most significant bit of register X in register F 
-    // and then shifts VX to the left by 1
-    if(opcode & 0XF00F == 0X800E)
+    else if (opcode & 0xF00F == 0x8007) // case 8XY7
     {
-        return;
+        executeOpcode8XY7();
     }
-
-    // case 9XY0
-    
-
-    // case ANNN
-
-    // case BNNN
-
-    // case CXNN
-
-    // case DXYN
-
-    // case EX9E
-
-    // case EXA1
-
-    // case FX07
-
-    // case FX0A
-
-    // case FX15
-
-    // case FX18
-
-    // case FX1E
-
-    // case FX29
-
-    // case FX33
-
-    // case FX55
-
-    // case FX65
+    else if (opcode & 0xF00F == 0x800E) // case 8XYE
+    {
+        executeOpcode8XYE();
+    }
+    else if (opcode & 0xF00F == 0x9000) // case 9XY0
+    {
+        executeOpcode9XY0();
+    }
+    else if (opcode >> 12 == 0x000A) // case ANNN
+    {
+        executeOpcodeANNN();
+    }
+    else if (opcode >> 12 == 0x000B) // case BNNN
+    {
+        executeOpcodeBNNN();
+    }
+    else if (opcode >> 12 == 0x000C) // case CXNN
+    {
+        executeOpcodeCXNN();
+    }
+    else if (opcode >> 12 == 0x000D) // case DXYN
+    {
+        executeOpcodeDXYN();
+    }
+    else if (opcode & 0xF0FF == 0xE09E) // case EX9E
+    {
+        executeOpcodeEX9E();
+    }
+    else if (opcode & 0xF0FF == 0xE0A1) // case EXA1
+    {
+        executeOpcodeEXA1();
+    }
+    else if (opcode & 0xF0FF == 0xF007) // case FX07
+    {
+        executeOpcodeFX07();
+    }
+    else if (opcode & 0xF0FF == 0xF00A) // case FX0A
+    {
+        executeOpcodeFX0A();
+    }
+    else if (opcode & 0xF0FF == 0xF015) // case FX15
+    {
+        executeOpcodeFX15();
+    }
+    else if (opcode & 0xF0FF == 0xF018) // case FX18
+    {
+        executeOpcodeFX18();
+    }
+    else if (opcode & 0xF0FF == 0xF01E) // case FX1E
+    {
+        executeOpcodeFX1E();
+    }
+    else if (opcode & 0xF0FF == 0xF029) // case FX29
+    {
+        executeOpcodeFX29();
+    }
+    else if (opcode & 0xF0FF == 0xF033) // case FX33
+    {
+        executeOpcodeFX33();
+    }
+    else if (opcode & 0xF0FF == 0xF055) // case FX55
+    {
+        executeOpcodeFX55();
+    }
+    else if (opcode & 0xF0FF == 0xF065) // case FX65
+    {
+        executeOpcodeFX65();
+    }
 }
 
-void Chip8::updateTimers()
+void Chip8::executeOpcode00E0()
+{
+}
+
+void Chip8::executeOpcode00EE()
+{
+}
+
+void Chip8::executeOpcode0NNN()
+{
+}
+
+void Chip8::executeOpcode1NNN()
+{
+}
+
+void Chip8::executeOpcode2NNN()
+{
+}
+
+void Chip8::executeOpcode3XNN()
+{
+}
+
+void Chip8::executeOpcode4XNN()
+{
+}
+
+void Chip8::executeOpcode5XY0()
+{
+}
+
+void Chip8::executeOpcode6XNN()
+{
+}
+
+void Chip8::executeOpcode7XNN()
+{
+}
+
+void Chip8::executeOpcode8XY0()
+{
+}
+
+void Chip8::executeOpcode8XY1()
+{
+}
+
+void Chip8::executeOpcode8XY2()
+{
+}
+
+void Chip8::executeOpcode8XY3()
+{
+}
+
+void Chip8::executeOpcode8XY4()
+{
+}
+
+void Chip8::executeOpcode8XY5()
+{
+}
+
+void Chip8::executeOpcode8XY6()
+{
+}
+
+void Chip8::executeOpcode8XY7()
+{
+}
+
+void Chip8::executeOpcode8XYE()
+{
+}
+
+void Chip8::executeOpcode9XY0()
+{
+}
+
+void Chip8::executeOpcodeANNN()
+{
+}
+
+void Chip8::executeOpcodeBNNN()
+{
+}
+
+void Chip8::executeOpcodeCXNN()
+{
+}
+
+void Chip8::executeOpcodeDXYN()
+{
+}
+
+void Chip8::executeOpcodeEX9E()
+{
+}
+
+void Chip8::executeOpcodeEXA1()
+{
+}
+
+void Chip8::executeOpcodeFX07()
+{
+}
+
+void Chip8::executeOpcodeFX0A()
+{
+}
+
+void Chip8::executeOpcodeFX15()
+{
+}
+
+void Chip8::executeOpcodeFX18()
+{
+}
+
+void Chip8::executeOpcodeFX1E()
+{
+}
+
+void Chip8::executeOpcodeFX29()
+{
+}
+
+void Chip8::executeOpcodeFX33()
+{
+}
+
+void Chip8::executeOpcodeFX55()
+{
+}
+
+void Chip8::executeOpcodeFX65()
 {
 }

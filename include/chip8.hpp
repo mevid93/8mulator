@@ -52,9 +52,45 @@ private:
             0xF0, 0x80, 0xF0, 0x80, 0x80  // F
     };
 
-    void fetchOpcode();
-    void decodeAndExecuteOpcode();
-    void updateTimers();
+    void fetchOpcode();            // get next opcode
+    void decodeAndExecuteOpcode(); // decode and execute the opcode
+    void updateTimers();           // update delay timer and sound timer
+
+    void executeOpcode00E0(); // clear the screen
+    void executeOpcode00EE(); // return from subroutine
+    void executeOpcode0NNN(); // call machine code routine at address NNN
+    void executeOpcode1NNN(); // jump to address NNN
+    void executeOpcode2NNN(); // call subroutine at address NNN
+    void executeOpcode3XNN(); // skip next instruction if registers[X] == NN
+    void executeOpcode4XNN(); // skip next instruction if registers[X] != NN
+    void executeOpcode5XY0(); // skip next instruction if registers[X] == registers[Y]
+    void executeOpcode6XNN(); // registers[X] = NN
+    void executeOpcode7XNN(); // registers[X] += NN
+    void executeOpcode8XY0(); // registers[X] = registers[Y] 
+    void executeOpcode8XY1(); // registers[X] = registers[X] | registers[Y]
+    void executeOpcode8XY2(); // registers[X] = registers[X] & registers[Y]
+    void executeOpcode8XY3(); // registers[X] = registers[X] ^ registers[Y]
+    void executeOpcode8XY4(); // registers[X] += registers[Y]; registers[F] = (1 or 0)
+    void executeOpcode8XY5(); // registers[X] -= registers[Y]; registers[F] = (1 or 0)
+    void executeOpcode8XY6(); // store least significat bit to registers[F] and shift registers[X] >> 1
+    void executeOpcode8XY7(); // registers[X] = registers[Y] - registers[X]; registers[F] = (0 or 1)
+    void executeOpcode8XYE(); // store most significant bit to registers[F] and shift registers[X] << 1
+    void executeOpcode9XY0(); // skip next instruction if registers[X] != registers[Y]
+    void executeOpcodeANNN(); // ir = NNN
+    void executeOpcodeBNNN(); // Jumps to address NNN + registers[0]
+    void executeOpcodeCXNN(); // register[X] = rand() & NN
+    void executeOpcodeDXYN(); // Draws a sprite at coordinate (registesr[X], registers[Y]) that has a height of N+1 pixels
+    void executeOpcodeEX9E(); // Skips the next instruction if the key stored in registers[X] is pressed
+    void executeOpcodeEXA1(); // Skips the next instruction if the key stored in registers[X] is not pressed.
+    void executeOpcodeFX07(); // registers[X] = delay_timer
+    void executeOpcodeFX0A(); // A key press is awaited, and then stored in VX. (Blocking until next key event) 
+    void executeOpcodeFX15(); // delay_timer = registers[X]
+    void executeOpcodeFX18(); // sound_timer = registers[X]
+    void executeOpcodeFX1E(); // ir += registers[X]
+    void executeOpcodeFX29(); // Sets ir to the location of the sprite for the character in registers[X]
+    void executeOpcodeFX33(); // Stores the binary-coded decimal representation of registers[X]
+    void executeOpcodeFX55(); // Stores registers[0] to registers[X] (including registers[X] in memory starting at address ir
+    void executeOpcodeFX65(); // Fills registers[0] to registers[X] (including registers[X]) with values starting at address ir
 };
 
 #endif
