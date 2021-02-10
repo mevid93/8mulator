@@ -20,7 +20,8 @@ private:
     const unsigned char pixelsHorizontal = 64; // number of horizontal pixels in emulated screen
     const unsigned char pixelsVertical = 32;   // number of vertical pixels in emulated screen
 
-    unsigned int shaderProgram; // opengl shader program identifier
+    unsigned int shaderProgramWhite; // opengl shader program identifier (white)
+    unsigned int shaderProgramBlack; // opengl shader program idnetifier (black)
 
     // openGL vertex shader resource
     const char *vertexShaderSource = "#version 330 core\n"

@@ -25,8 +25,6 @@ int main(int argc, char *argv[])
     // set up OpenGL render system
     Gui *gui = new Gui();
     gui->setupGraphics();
-    if (gui->window == nullptr)
-        return -1;
 
     // emulation loop
     while (!glfwWindowShouldClose(gui->window))
