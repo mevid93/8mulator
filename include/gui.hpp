@@ -3,6 +3,14 @@
 
 #include <GLFW/glfw3.h>
 
+const unsigned int WIDTH = 1280;            // window width in pixels
+const unsigned int HEIGTH = 720;            // window height in pixels
+const unsigned int PIXELS = 64 * 32;        // number of emulated pixels
+const unsigned char PIXELS_HORIZONTAL = 64; // number of horizontal pixels in emulated screen
+const unsigned char PIXELS_VERTICAL = 32;   // number of vertical pixels in emulated screen
+const float MARGIN_HORIZONTAL = 0.3f;       // margin from emulated screen to window borders (horizontal)
+const float MARGIN_VERTICAL = 0.2f;         // margin from emulated screen to window borders (vertical)
+
 class Gui
 {
 public:
@@ -15,13 +23,13 @@ public:
     void clearGraphics(); // remove all allocated openGL graphic objects
 
 private:
-    const unsigned int WIDTH = 1280;           // window width in pixels
-    const unsigned int HEIGTH = 720;           // window height in pixels
-    const unsigned char pixelsHorizontal = 64; // number of horizontal pixels in emulated screen
-    const unsigned char pixelsVertical = 32;   // number of vertical pixels in emulated screen
-
-    unsigned int shaderProgramWhite; // opengl shader program identifier (white)
-    unsigned int shaderProgramBlack; // opengl shader program idnetifier (black)
+    unsigned int shaderProgramWhite;  // opengl shader program identifier (white)
+    unsigned int shaderProgramBlack;  // opengl shader program idnetifier (black)
+    unsigned int VBOs[PIXELS];        // vertex buffer objects
+    unsigned int VAOs[PIXELS];        // vertex array objects
+    unsigned int EBOs[PIXELS];        // element buffer objects
+    unsigned int indices[PIXELS * 6]; // indices for element buffer objects
+    float vertices[PIXELS * 12];      // vertex data
 
     // openGL vertex shader resource
     const char *vertexShaderSource = "#version 330 core\n"
@@ -46,6 +54,12 @@ private:
                                             "{\n"
                                             "   FragColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);\n"
                                             "}\n\0";
+
+    void initializeVersion();        // define openGL version
+    void initializeWindow();         // create openGL window
+    void initializeShaderPrograms(); // create shader programs (black and white)
+    void initializeVertexData();     // create vertex data for pixels
+    void initializeVertexArrays();   // initialize vertex array objects and vertex buffer objects
 };
 
 #endif

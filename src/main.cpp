@@ -39,8 +39,8 @@ int main(int argc, char *argv[])
         chip8->emulateCycle();
 
         // if the draw flag is set, update the screen
-        if (chip8->drawFlag)
-            gui->drawGraphics();
+        //if (chip8->drawFlag)
+        gui->drawGraphics();
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         glfwSwapBuffers(gui->window);
