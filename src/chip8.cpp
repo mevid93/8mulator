@@ -89,6 +89,11 @@ void Chip8::updateTimers()
 {
 }
 
+unsigned char *Chip8::getPixelStates()
+{
+    return gfx;
+}
+
 void Chip8::fetchOpcode()
 {
     opcode = memory[pc] << 8 | memory[pc + 1];

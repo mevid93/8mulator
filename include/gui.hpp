@@ -18,9 +18,10 @@ public:
 
     ~Gui(); // desctructor
 
-    void setupGraphics(); // function to initialize GLFW window
-    void drawGraphics();  // function to draw graphics
-    void clearGraphics(); // remove all allocated openGL graphic objects
+    void setupGraphics();                                // function to initialize GLFW window
+    void drawGraphics(const unsigned char *pixelStates); // function to draw graphics
+    void clearGraphics();                                // remove all allocated openGL graphic objects
+    bool shouldCloseGui();                               // returns true if Gui should be closed
 
 private:
     unsigned int shaderProgramWhite;  // opengl shader program identifier (white)

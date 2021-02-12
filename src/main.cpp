@@ -1,5 +1,4 @@
 #include <iostream>
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "chip8.hpp"
 #include "utilities.hpp"
@@ -25,9 +24,10 @@ int main(int argc, char *argv[])
     // set up OpenGL render system
     Gui *gui = new Gui();
     gui->setupGraphics();
+    
 
     // emulation loop
-    while (!glfwWindowShouldClose(gui->window))
+    while (!gui->shouldCloseGui())
     {
         // check user input
         processInput(gui->window);
@@ -40,15 +40,12 @@ int main(int argc, char *argv[])
 
         // if the draw flag is set, update the screen
         //if (chip8->drawFlag)
-        gui->drawGraphics();
+        gui->drawGraphics(chip8->getPixelStates());
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         glfwSwapBuffers(gui->window);
         glfwPollEvents();
     }
-
-    // glfw: terminate, clearing all previously allocated GLFW resources.
-    glfwTerminate();
 
     // delete other resources
     delete chip8;

@@ -19,6 +19,7 @@ public:
     void loadProgram(const std::string filename); // load program into the chipset memory
     void emulateCycle();                          // emulate one cycle
     void setKeys();                               // store key press state (press and release)
+    unsigned char *getPixelStates();              // return array of chars that represent pixel state (on/off)
 
 private:
     unsigned char memory[MEMORY_SIZE];       // memory of the chipset
@@ -66,7 +67,7 @@ private:
     void executeOpcode5XY0(); // skip next instruction if registers[X] == registers[Y]
     void executeOpcode6XNN(); // registers[X] = NN
     void executeOpcode7XNN(); // registers[X] += NN
-    void executeOpcode8XY0(); // registers[X] = registers[Y] 
+    void executeOpcode8XY0(); // registers[X] = registers[Y]
     void executeOpcode8XY1(); // registers[X] = registers[X] | registers[Y]
     void executeOpcode8XY2(); // registers[X] = registers[X] & registers[Y]
     void executeOpcode8XY3(); // registers[X] = registers[X] ^ registers[Y]
@@ -83,7 +84,7 @@ private:
     void executeOpcodeEX9E(); // Skips the next instruction if the key stored in registers[X] is pressed
     void executeOpcodeEXA1(); // Skips the next instruction if the key stored in registers[X] is not pressed.
     void executeOpcodeFX07(); // registers[X] = delay_timer
-    void executeOpcodeFX0A(); // A key press is awaited, and then stored in VX. (Blocking until next key event) 
+    void executeOpcodeFX0A(); // A key press is awaited, and then stored in VX. (Blocking until next key event)
     void executeOpcodeFX15(); // delay_timer = registers[X]
     void executeOpcodeFX18(); // sound_timer = registers[X]
     void executeOpcodeFX1E(); // ir += registers[X]

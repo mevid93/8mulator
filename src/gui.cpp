@@ -9,22 +9,14 @@ void framebufferSizeCallback(GLFWwindow *window, int width, int height)
 
 Gui::~Gui()
 {
-    // we need to release graphic related resources
     clearGraphics();
 }
 
 void Gui::initializeVersion()
 {
-    // initialize glfw
     glfwInit();
-
-    // set major version of openGL
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-
-    // set minor version of openGL
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-
-    // use the core version of openGL
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 }
 
@@ -155,7 +147,7 @@ void Gui::setupGraphics()
     initializeVertexArrays();
 }
 
-void Gui::drawGraphics()
+void Gui::drawGraphics(const unsigned char *pixelStates)
 {
     // fill with black
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -164,8 +156,11 @@ void Gui::drawGraphics()
     // loop thourgh all pixels
     for (int i = 0; i < PIXELS; i++)
     {
-        // TODO: check pixel status and choose correct fragment shader
-        glUseProgram(shaderProgramWhite);
+        // check pixel status and choose correct fragment shader
+        if (pixelStates[i] == 0)
+            glUseProgram(shaderProgramBlack);
+        else
+            glUseProgram(shaderProgramWhite);
 
         // draw emulated pixel rectanle
         glBindVertexArray(VAOs[i]);
@@ -173,8 +168,17 @@ void Gui::drawGraphics()
     }
 }
 
+bool Gui::shouldCloseGui()
+{
+    return glfwWindowShouldClose(window);
+}
+
 void Gui::clearGraphics()
 {
+
+    // glfw: terminate, clearing all previously allocated GLFW resources.
+    // glfwTerminate(); // this causes memory leak (bug in glfw?)
+
     // delete vertex arrays
     glDeleteVertexArrays(PIXELS, VAOs);
 
