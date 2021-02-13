@@ -101,6 +101,7 @@ void Chip8::fetchOpcode()
 
 void Chip8::decodeAndExecuteOpcode()
 {
+    std::cout << std::hex << opcode << std::endl;
     if (opcode == 0x00E0) // case 00E0
     {
         executeOpcode00E0();
@@ -257,10 +258,14 @@ void Chip8::executeOpcode0NNN()
 
 void Chip8::executeOpcode1NNN()
 {
+    pc = opcode & 0x0FFF;
 }
 
 void Chip8::executeOpcode2NNN()
 {
+    stack[sp] = pc;
+    sp++;
+    pc = opcode & 0x0FFF;
 }
 
 void Chip8::executeOpcode3XNN()
@@ -269,6 +274,11 @@ void Chip8::executeOpcode3XNN()
 
 void Chip8::executeOpcode4XNN()
 {
+    int x = opcode & 0x0F00;
+    int nn = opcode & 0x00FF;
+    if (registers[x] != nn)
+        pc += 2;
+    pc += 2;
 }
 
 void Chip8::executeOpcode5XY0()

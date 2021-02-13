@@ -24,14 +24,13 @@ int main(int argc, char *argv[])
     // set up OpenGL render system
     Gui *gui = new Gui();
     gui->setupGraphics();
-    
 
     // emulation loop
     while (!gui->shouldCloseGui())
     {
         // check user input
         processInput(gui->window);
-        
+
         // Store key press state (Press and Release)
         chip8->setKeys();
 
@@ -39,8 +38,8 @@ int main(int argc, char *argv[])
         chip8->emulateCycle();
 
         // if the draw flag is set, update the screen
-        //if (chip8->drawFlag)
-        gui->drawGraphics(chip8->getPixelStates());
+        if (chip8->drawFlag)
+            gui->drawGraphics(chip8->getPixelStates());
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         glfwSwapBuffers(gui->window);
