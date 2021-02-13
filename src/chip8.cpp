@@ -87,6 +87,16 @@ void Chip8::setKeys()
 
 void Chip8::updateTimers()
 {
+    // Update timers
+    if (delayTimer > 0)
+        --delayTimer;
+
+    if (soundTimer > 0)
+    {
+        //if (soundTimer == 1)
+        // todo impoement sound
+        --soundTimer;
+    }
 }
 
 unsigned char *Chip8::getPixelStates()
@@ -101,7 +111,7 @@ void Chip8::fetchOpcode()
 
 void Chip8::decodeAndExecuteOpcode()
 {
-    std::cout << std::hex << opcode << std::endl;
+    std::cout << opcode << std::endl;
     if (opcode == 0x00E0) // case 00E0
     {
         executeOpcode00E0();
@@ -110,7 +120,7 @@ void Chip8::decodeAndExecuteOpcode()
     {
         executeOpcode00EE();
     }
-    else if (opcode & 0xF000 == 0x0000) // case 0NNN
+    else if ((opcode & 0xF000) == 0x0000) // case 0NNN
     {
         executeOpcode0NNN();
     }
@@ -142,43 +152,43 @@ void Chip8::decodeAndExecuteOpcode()
     {
         executeOpcode7XNN();
     }
-    else if (opcode & 0xF00F == 0x8000) // case 8XY0
+    else if ((opcode & 0xF00F) == 0x8000) // case 8XY0
     {
         executeOpcode8XY0();
     }
-    else if (opcode & 0xF00F == 0x8001) // case 8XY1
+    else if ((opcode & 0xF00F) == 0x8001) // case 8XY1
     {
         executeOpcode8XY1();
     }
-    else if (opcode & 0xF00F == 0x8002) // case 8XY2
+    else if ((opcode & 0xF00F) == 0x8002) // case 8XY2
     {
         executeOpcode8XY2();
     }
-    else if (opcode & 0xF00F == 0x8003) // case 8XY3
+    else if ((opcode & 0xF00F) == 0x8003) // case 8XY3
     {
         executeOpcode8XY3();
     }
-    else if (opcode & 0xF00F == 0x8004) // case 8XY4
+    else if ((opcode & 0xF00F) == 0x8004) // case 8XY4
     {
         executeOpcode8XY4();
     }
-    else if (opcode & 0xF00F == 0x8005) // case 8XY5
+    else if ((opcode & 0xF00F) == 0x8005) // case 8XY5
     {
         executeOpcode8XY5();
     }
-    else if (opcode & 0xF00F == 0x8006) // case 8XY6
+    else if ((opcode & 0xF00F) == 0x8006) // case 8XY6
     {
         executeOpcode8XY6();
     }
-    else if (opcode & 0xF00F == 0x8007) // case 8XY7
+    else if ((opcode & 0xF00F) == 0x8007) // case 8XY7
     {
         executeOpcode8XY7();
     }
-    else if (opcode & 0xF00F == 0x800E) // case 8XYE
+    else if ((opcode & 0xF00F) == 0x800E) // case 8XYE
     {
         executeOpcode8XYE();
     }
-    else if (opcode & 0xF00F == 0x9000) // case 9XY0
+    else if ((opcode & 0xF00F) == 0x9000) // case 9XY0
     {
         executeOpcode9XY0();
     }
@@ -198,47 +208,47 @@ void Chip8::decodeAndExecuteOpcode()
     {
         executeOpcodeDXYN();
     }
-    else if (opcode & 0xF0FF == 0xE09E) // case EX9E
+    else if ((opcode & 0xF0FF) == 0xE09E) // case EX9E
     {
         executeOpcodeEX9E();
     }
-    else if (opcode & 0xF0FF == 0xE0A1) // case EXA1
+    else if ((opcode & 0xF0FF) == 0xE0A1) // case EXA1
     {
         executeOpcodeEXA1();
     }
-    else if (opcode & 0xF0FF == 0xF007) // case FX07
+    else if ((opcode & 0xF0FF) == 0xF007) // case FX07
     {
         executeOpcodeFX07();
     }
-    else if (opcode & 0xF0FF == 0xF00A) // case FX0A
+    else if ((opcode & 0xF0FF) == 0xF00A) // case FX0A
     {
         executeOpcodeFX0A();
     }
-    else if (opcode & 0xF0FF == 0xF015) // case FX15
+    else if ((opcode & 0xF0FF) == 0xF015) // case FX15
     {
         executeOpcodeFX15();
     }
-    else if (opcode & 0xF0FF == 0xF018) // case FX18
+    else if ((opcode & 0xF0FF) == 0xF018) // case FX18
     {
         executeOpcodeFX18();
     }
-    else if (opcode & 0xF0FF == 0xF01E) // case FX1E
+    else if ((opcode & 0xF0FF) == 0xF01E) // case FX1E
     {
         executeOpcodeFX1E();
     }
-    else if (opcode & 0xF0FF == 0xF029) // case FX29
+    else if ((opcode & 0xF0FF) == 0xF029) // case FX29
     {
         executeOpcodeFX29();
     }
-    else if (opcode & 0xF0FF == 0xF033) // case FX33
+    else if ((opcode & 0xF0FF) == 0xF033) // case FX33
     {
         executeOpcodeFX33();
     }
-    else if (opcode & 0xF0FF == 0xF055) // case FX55
+    else if ((opcode & 0xF0FF) == 0xF055) // case FX55
     {
         executeOpcodeFX55();
     }
-    else if (opcode & 0xF0FF == 0xF065) // case FX65
+    else if ((opcode & 0xF0FF) == 0xF065) // case FX65
     {
         executeOpcodeFX65();
     }
@@ -246,14 +256,24 @@ void Chip8::decodeAndExecuteOpcode()
 
 void Chip8::executeOpcode00E0()
 {
+    for (int i = 0; i < PIXELS_SIZE; i++)
+    {
+        gfx[i] = 0;
+    }
+    pc += 2;
 }
 
 void Chip8::executeOpcode00EE()
 {
+    sp--;
+    pc = stack[sp];
+    pc += 2;
 }
 
 void Chip8::executeOpcode0NNN()
 {
+    std::cout << std::hex << opcode << " "
+              << "0NNN" << std::endl;
 }
 
 void Chip8::executeOpcode1NNN()
@@ -270,11 +290,16 @@ void Chip8::executeOpcode2NNN()
 
 void Chip8::executeOpcode3XNN()
 {
+    int x = (opcode & 0x0F00) >> 8;
+    int nn = opcode & 0x00FF;
+    if (registers[x] == nn)
+        pc += 2;
+    pc += 2;
 }
 
 void Chip8::executeOpcode4XNN()
 {
-    int x = opcode & 0x0F00;
+    int x = (opcode & 0x0F00) >> 8;
     int nn = opcode & 0x00FF;
     if (registers[x] != nn)
         pc += 2;
@@ -283,11 +308,13 @@ void Chip8::executeOpcode4XNN()
 
 void Chip8::executeOpcode5XY0()
 {
+    std::cout << std::hex << opcode << " "
+              << "5XY0" << std::endl;
 }
 
 void Chip8::executeOpcode6XNN()
 {
-    int x = opcode & 0x0F00;
+    int x = (opcode & 0x0F00) >> 8;
     int nn = opcode & 0x00FF;
     registers[x] = nn;
     pc += 2;
@@ -295,46 +322,76 @@ void Chip8::executeOpcode6XNN()
 
 void Chip8::executeOpcode7XNN()
 {
+    int x = (opcode & 0x0F00) >> 8;
+    int nn = opcode & 0x00FF;
+    registers[x] += nn;
+    pc += 2;
 }
 
 void Chip8::executeOpcode8XY0()
 {
+    int x = (opcode & 0x0F00) >> 8;
+    int y = (opcode & 0x00F0) >> 4;
+    registers[x] = registers[y];
+    pc += 2;
 }
 
 void Chip8::executeOpcode8XY1()
 {
+    std::cout << std::hex << opcode << " "
+              << "8XY1" << std::endl;
 }
 
 void Chip8::executeOpcode8XY2()
 {
+    int x = (opcode & 0x0F00) >> 8;
+    int y = (opcode & 0x00F0) >> 4;
+    registers[x] = registers[x] & registers[y];
+    pc += 2;
 }
 
 void Chip8::executeOpcode8XY3()
 {
+    std::cout << std::hex << opcode << " "
+              << "8XY3" << std::endl;
 }
 
 void Chip8::executeOpcode8XY4()
 {
+    std::cout << std::hex << opcode << " "
+              << "8XY4" << std::endl;
 }
 
 void Chip8::executeOpcode8XY5()
 {
+    std::cout << std::hex << opcode << " "
+              << "8XY5" << std::endl;
 }
 
 void Chip8::executeOpcode8XY6()
 {
+    int x = (opcode & 0x0F00) >> 8;
+    registers[0xF] = registers[x] & 1;
+    registers[x] = registers[x] >> 1;
+    pc += 2;
 }
 
 void Chip8::executeOpcode8XY7()
 {
+    std::cout << std::hex << opcode << " "
+              << "8XY7" << std::endl;
 }
 
 void Chip8::executeOpcode8XYE()
 {
+    std::cout << std::hex << opcode << " "
+              << "8XYE" << std::endl;
 }
 
 void Chip8::executeOpcode9XY0()
 {
+    std::cout << std::hex << opcode << " "
+              << "9XY0" << std::endl;
 }
 
 void Chip8::executeOpcodeANNN()
@@ -345,56 +402,111 @@ void Chip8::executeOpcodeANNN()
 
 void Chip8::executeOpcodeBNNN()
 {
+    std::cout << std::hex << opcode << " "
+              << "BNNN" << std::endl;
 }
 
 void Chip8::executeOpcodeCXNN()
 {
+    int x = (opcode & 0x0F00) >> 8;
+    int nn = opcode & 0x00FF;
+    registers[x] = nn & (rand() % 256);
+    pc += 2;
 }
 
 void Chip8::executeOpcodeDXYN()
 {
+    int x = registers[(opcode & 0x0F00) >> 8];
+    int y = registers[(opcode & 0x00F0) >> 4];
+    int n = opcode & 0x000F;
+    unsigned short pixel;
+
+    registers[0xF] = 0;
+    for (int row = 0; row < n; row++)
+    {
+        pixel = memory[ir + row];
+        for (int col = 0; col < 8; col++)
+        {
+            if (pixel & (0x80 >> col) != 0)
+            {
+                if (gfx[(y + row) * 64 + x + col] == 1)
+                    registers[0xF] = 1;
+                gfx[(y + row) * 64 + x + col] ^= 1;
+            }
+        }
+    }
+    drawFlag = true;
+    pc += 2;
 }
 
 void Chip8::executeOpcodeEX9E()
 {
+    int x = (opcode & 0x0F00) >> 8;
+    if (keys[registers[x]] == 1)
+        pc += 2;
+    pc += 2;
 }
 
 void Chip8::executeOpcodeEXA1()
 {
+    int x = (opcode & 0x0F00) >> 8;
+    if (keys[registers[x]] != 1)
+        pc += 2;
+    pc += 2;
 }
 
 void Chip8::executeOpcodeFX07()
 {
+    std::cout << std::hex << opcode << " "
+              << "FX07" << std::endl;
 }
 
 void Chip8::executeOpcodeFX0A()
 {
+    std::cout << std::hex << opcode << " "
+              << "FX0A" << std::endl;
 }
 
 void Chip8::executeOpcodeFX15()
 {
+    int x = (opcode & 0x0F00) >> 8;
+    delayTimer = x;
+    pc += 2;
 }
 
 void Chip8::executeOpcodeFX18()
 {
+    std::cout << std::hex << opcode << " "
+              << "FX18" << std::endl;
 }
 
 void Chip8::executeOpcodeFX1E()
 {
+    int x = (opcode & 0x0F00) >> 8;
+    ir += registers[x];
+    pc += 2;
 }
 
 void Chip8::executeOpcodeFX29()
 {
+    std::cout << std::hex << opcode << " "
+              << "FX29" << std::endl;
 }
 
 void Chip8::executeOpcodeFX33()
 {
+    std::cout << std::hex << opcode << " "
+              << "FX33" << std::endl;
 }
 
 void Chip8::executeOpcodeFX55()
 {
+    std::cout << std::hex << opcode << " "
+              << "FX55" << std::endl;
 }
 
 void Chip8::executeOpcodeFX65()
 {
+    std::cout << std::hex << opcode << " "
+              << "FX65" << std::endl;
 }
