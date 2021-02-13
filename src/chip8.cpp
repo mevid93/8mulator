@@ -287,6 +287,10 @@ void Chip8::executeOpcode5XY0()
 
 void Chip8::executeOpcode6XNN()
 {
+    int x = opcode & 0x0F00;
+    int nn = opcode & 0x00FF;
+    registers[x] = nn;
+    pc += 2;
 }
 
 void Chip8::executeOpcode7XNN()
@@ -335,6 +339,8 @@ void Chip8::executeOpcode9XY0()
 
 void Chip8::executeOpcodeANNN()
 {
+    ir = opcode & 0x0FFF;
+    pc += 2;
 }
 
 void Chip8::executeOpcodeBNNN()
