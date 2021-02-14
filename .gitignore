@@ -4,6 +4,9 @@
 # ignore exmpale programs folder
 /programs
 
+# ignore personal settings
+.vscode
+
 # Prerequisites
 *.d
 

@@ -111,7 +111,6 @@ void Chip8::fetchOpcode()
 
 void Chip8::decodeAndExecuteOpcode()
 {
-    std::cout << opcode << std::endl;
     if (opcode == 0x00E0) // case 00E0
     {
         executeOpcode00E0();
@@ -290,8 +289,8 @@ void Chip8::executeOpcode2NNN()
 
 void Chip8::executeOpcode3XNN()
 {
-    int x = (opcode & 0x0F00) >> 8;
-    int nn = opcode & 0x00FF;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    unsigned short nn = opcode & 0x00FF;
     if (registers[x] == nn)
         pc += 2;
     pc += 2;
@@ -299,8 +298,8 @@ void Chip8::executeOpcode3XNN()
 
 void Chip8::executeOpcode4XNN()
 {
-    int x = (opcode & 0x0F00) >> 8;
-    int nn = opcode & 0x00FF;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    unsigned short nn = opcode & 0x00FF;
     if (registers[x] != nn)
         pc += 2;
     pc += 2;
@@ -308,69 +307,88 @@ void Chip8::executeOpcode4XNN()
 
 void Chip8::executeOpcode5XY0()
 {
-    std::cout << std::hex << opcode << " "
-              << "5XY0" << std::endl;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    unsigned short y = (opcode & 0x00F0) >> 4;
+    if (registers[x] == registers[y])
+        pc += 2;
+    pc += 2;
 }
 
 void Chip8::executeOpcode6XNN()
 {
-    int x = (opcode & 0x0F00) >> 8;
-    int nn = opcode & 0x00FF;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    unsigned short nn = opcode & 0x00FF;
     registers[x] = nn;
     pc += 2;
 }
 
 void Chip8::executeOpcode7XNN()
 {
-    int x = (opcode & 0x0F00) >> 8;
-    int nn = opcode & 0x00FF;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    unsigned short nn = opcode & 0x00FF;
     registers[x] += nn;
     pc += 2;
 }
 
 void Chip8::executeOpcode8XY0()
 {
-    int x = (opcode & 0x0F00) >> 8;
-    int y = (opcode & 0x00F0) >> 4;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    unsigned short y = (opcode & 0x00F0) >> 4;
     registers[x] = registers[y];
     pc += 2;
 }
 
 void Chip8::executeOpcode8XY1()
 {
-    std::cout << std::hex << opcode << " "
-              << "8XY1" << std::endl;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    unsigned short y = (opcode & 0x00F0) >> 4;
+    registers[x] = registers[x] | registers[y];
+    pc += 2;
 }
 
 void Chip8::executeOpcode8XY2()
 {
-    int x = (opcode & 0x0F00) >> 8;
-    int y = (opcode & 0x00F0) >> 4;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    unsigned short y = (opcode & 0x00F0) >> 4;
     registers[x] = registers[x] & registers[y];
     pc += 2;
 }
 
 void Chip8::executeOpcode8XY3()
 {
-    std::cout << std::hex << opcode << " "
-              << "8XY3" << std::endl;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    unsigned short y = (opcode & 0x00F0) >> 4;
+    registers[x] = registers[x] ^ registers[y];
+    pc += 2;
 }
 
 void Chip8::executeOpcode8XY4()
 {
-    std::cout << std::hex << opcode << " "
-              << "8XY4" << std::endl;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    unsigned short y = (opcode & 0x00F0) >> 4;
+    unsigned int check = 0x10000;
+    unsigned int sum = registers[x] + registers[y];
+    registers[0xF] = 0;
+    if ((sum & check) != 0x0)
+        registers[0xF] = 1;
+    registers[x] += registers[y];
+    pc += 2;
 }
 
 void Chip8::executeOpcode8XY5()
 {
-    std::cout << std::hex << opcode << " "
-              << "8XY5" << std::endl;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    unsigned short y = (opcode & 0x00F0) >> 4;
+    registers[0xF] = 0;
+    if (registers[y] > registers[x])
+        registers[0xF] = 1;
+    registers[x] -= registers[y];
+    pc += 2;
 }
 
 void Chip8::executeOpcode8XY6()
 {
-    int x = (opcode & 0x0F00) >> 8;
+    unsigned short x = (opcode & 0x0F00) >> 8;
     registers[0xF] = registers[x] & 1;
     registers[x] = registers[x] >> 1;
     pc += 2;
@@ -390,8 +408,11 @@ void Chip8::executeOpcode8XYE()
 
 void Chip8::executeOpcode9XY0()
 {
-    std::cout << std::hex << opcode << " "
-              << "9XY0" << std::endl;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    unsigned short y = (opcode & 0x00F0) >> 4;
+    if (registers[x] != registers[y])
+        pc += 2;
+    pc += 2;
 }
 
 void Chip8::executeOpcodeANNN()
@@ -408,26 +429,26 @@ void Chip8::executeOpcodeBNNN()
 
 void Chip8::executeOpcodeCXNN()
 {
-    int x = (opcode & 0x0F00) >> 8;
-    int nn = opcode & 0x00FF;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    unsigned short nn = opcode & 0x00FF;
     registers[x] = nn & (rand() % 256);
     pc += 2;
 }
 
 void Chip8::executeOpcodeDXYN()
 {
-    int x = registers[(opcode & 0x0F00) >> 8];
-    int y = registers[(opcode & 0x00F0) >> 4];
-    int n = opcode & 0x000F;
+    unsigned short x = registers[(opcode & 0x0F00) >> 8];
+    unsigned short y = registers[(opcode & 0x00F0) >> 4];
+    unsigned short n = (opcode & 0x000F);
     unsigned short pixel;
 
     registers[0xF] = 0;
-    for (int row = 0; row < n; row++)
+    for (unsigned int row = 0; row < n; row++)
     {
         pixel = memory[ir + row];
-        for (int col = 0; col < 8; col++)
+        for (unsigned int col = 0; col < 8; col++)
         {
-            if (pixel & (0x80 >> col) != 0)
+            if ((pixel & (0x80 >> col)) != 0)
             {
                 if (gfx[(y + row) * 64 + x + col] == 1)
                     registers[0xF] = 1;
@@ -441,7 +462,7 @@ void Chip8::executeOpcodeDXYN()
 
 void Chip8::executeOpcodeEX9E()
 {
-    int x = (opcode & 0x0F00) >> 8;
+    unsigned short x = (opcode & 0x0F00) >> 8;
     if (keys[registers[x]] == 1)
         pc += 2;
     pc += 2;
@@ -449,7 +470,7 @@ void Chip8::executeOpcodeEX9E()
 
 void Chip8::executeOpcodeEXA1()
 {
-    int x = (opcode & 0x0F00) >> 8;
+    unsigned short x = (opcode & 0x0F00) >> 8;
     if (keys[registers[x]] != 1)
         pc += 2;
     pc += 2;
@@ -457,8 +478,9 @@ void Chip8::executeOpcodeEXA1()
 
 void Chip8::executeOpcodeFX07()
 {
-    std::cout << std::hex << opcode << " "
-              << "FX07" << std::endl;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    registers[x] = delayTimer;
+    pc += 2;
 }
 
 void Chip8::executeOpcodeFX0A()
@@ -469,15 +491,16 @@ void Chip8::executeOpcodeFX0A()
 
 void Chip8::executeOpcodeFX15()
 {
-    int x = (opcode & 0x0F00) >> 8;
-    delayTimer = x;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    delayTimer = registers[x];
     pc += 2;
 }
 
 void Chip8::executeOpcodeFX18()
 {
-    std::cout << std::hex << opcode << " "
-              << "FX18" << std::endl;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    soundTimer = registers[x];
+    pc += 2;
 }
 
 void Chip8::executeOpcodeFX1E()
@@ -489,24 +512,36 @@ void Chip8::executeOpcodeFX1E()
 
 void Chip8::executeOpcodeFX29()
 {
-    std::cout << std::hex << opcode << " "
-              << "FX29" << std::endl;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    ir = registers[x] * 5;
+    pc += 2;
 }
 
 void Chip8::executeOpcodeFX33()
 {
-    std::cout << std::hex << opcode << " "
-              << "FX33" << std::endl;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    memory[ir + 0] = registers[x] / 100;
+    memory[ir + 1] = (registers[x] - memory[ir + 0] * 100) / 10;
+    memory[ir + 2] = registers[x] - memory[ir + 0] * 100 - memory[ir + 1] * 10;
+    pc += 2;
 }
 
 void Chip8::executeOpcodeFX55()
 {
-    std::cout << std::hex << opcode << " "
-              << "FX55" << std::endl;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    for (unsigned short i = 0; i <= x; i++)
+    {
+        memory[ir + i] = registers[i];
+    }
+    pc += 2;
 }
 
 void Chip8::executeOpcodeFX65()
 {
-    std::cout << std::hex << opcode << " "
-              << "FX65" << std::endl;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    for (unsigned short i = 0; i <= x; i++)
+    {
+        registers[i] = memory[ir + i];
+    }
+    pc += 2;
 }
