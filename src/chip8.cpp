@@ -371,7 +371,7 @@ void Chip8::executeOpcode8XY4()
     registers[0xF] = 0;
     if ((sum & check) != 0x0)
         registers[0xF] = 1;
-    registers[x] += registers[y];
+    registers[x] = (registers[y] + registers[x]) & 0xFFFF;
     pc += 2;
 }
 
@@ -380,7 +380,7 @@ void Chip8::executeOpcode8XY5()
     unsigned short x = (opcode & 0x0F00) >> 8;
     unsigned short y = (opcode & 0x00F0) >> 4;
     registers[0xF] = 0;
-    if (registers[y] > registers[x])
+    if (registers[y] < registers[x])
         registers[0xF] = 1;
     registers[x] -= registers[y];
     pc += 2;
@@ -399,7 +399,7 @@ void Chip8::executeOpcode8XY7()
     unsigned short x = (opcode & 0x0F00) >> 8;
     unsigned short y = (opcode & 0x00F0) >> 4;
     registers[0xF] = 0;
-    if (registers[y] < registers[x])
+    if (registers[y] > registers[x])
         registers[0xF] = 1;
     registers[x] = registers[y] - registers[x];
     pc += 2;
