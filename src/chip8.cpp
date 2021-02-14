@@ -271,8 +271,8 @@ void Chip8::executeOpcode00EE()
 
 void Chip8::executeOpcode0NNN()
 {
-    std::cout << std::hex << opcode << " "
-              << "0NNN" << std::endl;
+    unsigned short nnn = opcode & 0x0FFF;
+    pc = nnn;
 }
 
 void Chip8::executeOpcode1NNN()
@@ -396,14 +396,21 @@ void Chip8::executeOpcode8XY6()
 
 void Chip8::executeOpcode8XY7()
 {
-    std::cout << std::hex << opcode << " "
-              << "8XY7" << std::endl;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    unsigned short y = (opcode & 0x00F0) >> 4;
+    registers[0xF] = 0;
+    if (registers[y] < registers[x])
+        registers[0xF] = 1;
+    registers[x] = registers[y] - registers[x];
+    pc += 2;
 }
 
 void Chip8::executeOpcode8XYE()
 {
-    std::cout << std::hex << opcode << " "
-              << "8XYE" << std::endl;
+    unsigned short x = (opcode & 0x0F00) >> 8;
+    registers[0xF] = registers[x] >> 11;
+    registers[x] = registers[x] << 1;
+    pc += 2;
 }
 
 void Chip8::executeOpcode9XY0()
@@ -423,8 +430,8 @@ void Chip8::executeOpcodeANNN()
 
 void Chip8::executeOpcodeBNNN()
 {
-    std::cout << std::hex << opcode << " "
-              << "BNNN" << std::endl;
+    unsigned short nnn = opcode & 0x0FFF;
+    pc = nnn + registers[0x0];
 }
 
 void Chip8::executeOpcodeCXNN()
@@ -485,8 +492,16 @@ void Chip8::executeOpcodeFX07()
 
 void Chip8::executeOpcodeFX0A()
 {
-    std::cout << std::hex << opcode << " "
-              << "FX0A" << std::endl;
+    for (unsigned char key = 0; key < KEYS_SIZE; key++)
+    {
+        if (keys[key] == 1)
+        {
+            unsigned short x = (opcode & 0x0F00) >> 8;
+            registers[x] = key;
+            pc += 2;
+            return;
+        }
+    }
 }
 
 void Chip8::executeOpcodeFX15()
