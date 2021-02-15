@@ -15,11 +15,11 @@ public:
 
     bool drawFlag; // flag tells if the display needs to be updated or not
 
-    void initialize();                            // initialize the chipset
-    void loadProgram(const std::string filename); // load program into the chipset memory
-    void emulateCycle();                          // emulate one cycle
-    void setKeys();                               // store key press state (press and release)
-    unsigned char *getPixelStates();              // return array of chars that represent pixel state (on/off)
+    void initialize();                                               // initialize the chipset
+    void loadProgram(const std::string filename);                    // load program into the chipset memory
+    void emulateCycle();                                             // emulate one cycle
+    void setKey(const unsigned char key, const unsigned char state); // store key press state (press and release)
+    unsigned char *getPixelStates();                                 // return array of chars that represent pixel state (on/off)
 
 private:
     unsigned char memory[MEMORY_SIZE];       // memory of the chipset

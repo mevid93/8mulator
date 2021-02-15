@@ -81,8 +81,9 @@ void Chip8::emulateCycle()
     updateTimers();
 }
 
-void Chip8::setKeys()
+void Chip8::setKey(const unsigned char key, const unsigned char state)
 {
+    keys[key] = state;
 }
 
 void Chip8::updateTimers()
@@ -94,7 +95,7 @@ void Chip8::updateTimers()
     if (soundTimer > 0)
     {
         //if (soundTimer == 1)
-        // todo impoement sound
+        //    std::cout << "NOT IMPLEMENTED!" << std::endl;
         --soundTimer;
     }
 }

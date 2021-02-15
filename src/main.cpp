@@ -29,10 +29,7 @@ int main(int argc, char *argv[])
     while (!gui->shouldCloseGui())
     {
         // check user input
-        processInput(gui->window);
-
-        // Store key press state (Press and Release)
-        chip8->setKeys();
+        processInput(gui->window, chip8);
 
         // emulate one cycle
         chip8->emulateCycle();
