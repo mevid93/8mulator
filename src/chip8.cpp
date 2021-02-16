@@ -1,7 +1,12 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 #include "chip8.hpp"
-#include "portaudio.h"
+
+Chip8::~Chip8()
+{
+    soundEngine->drop();
+}
 
 void Chip8::initialize()
 {
@@ -48,6 +53,9 @@ void Chip8::initialize()
     {
         memory[i] = fontset[i];
     }
+
+    // set sound engine
+    soundEngine = irrklang::createIrrKlangDevice();
 }
 
 void Chip8::loadProgram(const std::string filename)
@@ -89,16 +97,22 @@ void Chip8::setKey(const unsigned char key, const unsigned char state)
 
 void Chip8::updateTimers()
 {
+
+
     // Update timers
     if (delayTimer > 0)
         --delayTimer;
 
     if (soundTimer > 0)
     {
-        if (soundTimer == 1)
-            std::cout << "PortAudio" << std::endl;
+        //if (soundTimer == 1 && !soundEngine->isCurrentlyPlaying(SOUND_FILE))
+        //    soundEngine->play2D(SOUND_FILE);
         --soundTimer;
     }
+    //else if (soundTimer == 0 && soundEngine->isCurrentlyPlaying(SOUND_FILE))
+    //{
+    //    soundEngine->stopAllSounds();
+    //}
 }
 
 unsigned char *Chip8::getPixelStates()

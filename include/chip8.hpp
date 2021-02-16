@@ -2,6 +2,7 @@
 #define CHIP8_HPP
 
 #include <string>
+#include <irrKlang.h>
 
 class Chip8
 {
@@ -20,8 +21,10 @@ public:
     void emulateCycle();                                             // emulate one cycle
     void setKey(const unsigned char key, const unsigned char state); // store key press state (press and release)
     unsigned char *getPixelStates();                                 // return array of chars that represent pixel state (on/off)
+    ~Chip8();                                                        // free resources
 
 private:
+    irrklang::ISoundEngine *soundEngine;     // sound engine for audio output
     unsigned char memory[MEMORY_SIZE];       // memory of the chipset
     unsigned short opcode;                   // current operation code
     unsigned char registers[REGISTERS_SIZE]; // chipset registers
