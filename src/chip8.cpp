@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "chip8.hpp"
+#include "portaudio.h"
 
 void Chip8::initialize()
 {
@@ -94,8 +95,8 @@ void Chip8::updateTimers()
 
     if (soundTimer > 0)
     {
-        //if (soundTimer == 1)
-        //    std::cout << "NOT IMPLEMENTED!" << std::endl;
+        if (soundTimer == 1)
+            std::cout << "PortAudio" << std::endl;
         --soundTimer;
     }
 }

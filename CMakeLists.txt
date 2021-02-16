@@ -15,6 +15,8 @@ include_directories(lib/glfw)
 include_directories(lib/glfw/deps)
 include_directories(lib/glfw/include)
 
+add_subdirectory(lib/portaudio EXCLUDE_FROM_ALL)
+
 # Add sources to SOURCES variable
 file(GLOB_RECURSE SOURCES 
     "src/*.cpp"
@@ -32,3 +34,4 @@ target_include_directories(${PROJECT_NAME}
 
 # link libraries
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} portaudio_static)
