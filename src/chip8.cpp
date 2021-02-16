@@ -5,6 +5,7 @@
 
 Chip8::~Chip8()
 {
+    soundEngine->removeAllSoundSources();
     soundEngine->drop();
 }
 
@@ -56,6 +57,7 @@ void Chip8::initialize()
 
     // set sound engine
     soundEngine = irrklang::createIrrKlangDevice();
+    soundSource = soundEngine->addSoundSourceFromFile("./res/beep.wav");
 }
 
 void Chip8::loadProgram(const std::string filename)
@@ -97,22 +99,16 @@ void Chip8::setKey(const unsigned char key, const unsigned char state)
 
 void Chip8::updateTimers()
 {
-
-
     // Update timers
     if (delayTimer > 0)
         --delayTimer;
 
     if (soundTimer > 0)
     {
-        //if (soundTimer == 1 && !soundEngine->isCurrentlyPlaying(SOUND_FILE))
-        //    soundEngine->play2D(SOUND_FILE);
+        if (soundTimer == 1 && !soundEngine->isCurrentlyPlaying(soundSource))
+            soundEngine->play2D(soundSource);
         --soundTimer;
     }
-    //else if (soundTimer == 0 && soundEngine->isCurrentlyPlaying(SOUND_FILE))
-    //{
-    //    soundEngine->stopAllSounds();
-    //}
 }
 
 unsigned char *Chip8::getPixelStates()

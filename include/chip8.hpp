@@ -25,6 +25,7 @@ public:
 
 private:
     irrklang::ISoundEngine *soundEngine;     // sound engine for audio output
+    irrklang::ISoundSource *soundSource;     // sound effect source
     unsigned char memory[MEMORY_SIZE];       // memory of the chipset
     unsigned short opcode;                   // current operation code
     unsigned char registers[REGISTERS_SIZE]; // chipset registers

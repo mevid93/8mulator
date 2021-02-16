@@ -36,3 +36,6 @@ include_directories(lib/irrKlang/include)
 # link libraries
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/lib/irrKlang/bin/linux-gcc-64/libIrrKlang.so)
+
+# copy resources folder to build folder
+file(COPY ${PROJECT_SOURCE_DIR}/res DESTINATION ${PROJECT_SOURCE_DIR}/build)
