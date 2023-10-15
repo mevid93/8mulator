@@ -57,7 +57,7 @@ void Chip8::initialize()
 
     // set sound engine
     soundEngine = irrklang::createIrrKlangDevice();
-    soundSource = soundEngine->addSoundSourceFromFile("./res/beep.wav");
+    soundSource = soundEngine->addSoundSourceFromFile("./resources/beep.wav");
 }
 
 void Chip8::loadProgram(const std::string filename)
